@@ -33,6 +33,8 @@ public class ForgetSecretActivity extends AppCompatActivity {
     public int T = 60; //倒计时时长
     private Handler mHandler = new Handler();
 
+    int  b =2;
+
 
 
 
