@@ -91,13 +91,13 @@ public class HomeActivity extends AppCompatActivity {
                     return;
                 }else if (secret.equals(spSecret)){
                     Toast.makeText(HomeActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                    saveLoginStatus(true, phone);
-                    Intent data = new Intent();
-                    //datad.putExtra( ); name , value ;
-                    data.putExtra("isLogin",true);
+//                    saveLoginStatus(true, phone);
+//                    Intent data = new Intent();
+//                    //datad.putExtra( ); name , value ;
+//                    data.putExtra("isLogin",true);
                     //RESULT_OK为Activity系统常量，状态码为-1
                     // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-                    setResult(RESULT_OK,data);
+//                    setResult(RESULT_OK,data);
                     startActivity(new Intent(HomeActivity.this, WriteInfoActivity.class));
                     return;
                 }else if(spSecret!=null && !spSecret.equals(secret)){
@@ -143,17 +143,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //保存登录状态
-    private void saveLoginStatus(boolean status, String phone) {
-        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-        //获取编辑器
-        SharedPreferences.Editor editor = sp.edit();
-        //存入boolean类型的登录状态
-        editor.putBoolean("isLogin", status);
-        //存入登录时的手机号
-        editor.putString("loginPhone", phone);
-        //提交修改
-        editor.commit();
-    }
+//    private void saveLoginStatus(boolean status, String phone) {
+//        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+//        //获取编辑器
+//        SharedPreferences.Editor editor = sp.edit();
+//        //存入boolean类型的登录状态
+//        editor.putBoolean("isLogin", status);
+//        //存入登录时的手机号
+//        editor.putString("loginPhone", phone);
+//        //提交修改
+//        editor.commit();
+//    }
 
     /**
      * 注册成功的数据返回至此

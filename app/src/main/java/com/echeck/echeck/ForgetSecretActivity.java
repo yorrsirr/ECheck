@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -27,9 +28,13 @@ public class ForgetSecretActivity extends AppCompatActivity {
     private Button bt_get_code;
     private EditText et_phone, et_code, et_new_secret;
     EventHandler eventHandler;
+    private String phone, code, new_secret;
     //    private static boolean flag=false;
     public int T = 60; //倒计时时长
     private Handler mHandler = new Handler();
+
+
+
 
 
     @Override
@@ -104,6 +109,7 @@ public class ForgetSecretActivity extends AppCompatActivity {
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_code = (EditText) findViewById(R.id.et_code);
         et_new_secret = (EditText) findViewById(R.id.et_new_secret);
+
     }
 
 
@@ -122,7 +128,7 @@ public class ForgetSecretActivity extends AppCompatActivity {
         bt_get_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phone = et_phone.getText().toString().trim();
+                phone = et_phone.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(ForgetSecretActivity.this, "请输入登录手机号", Toast.LENGTH_SHORT).show();
                     return;
@@ -145,9 +151,10 @@ public class ForgetSecretActivity extends AppCompatActivity {
         bt_resetSecret.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phone = et_phone.getText().toString().trim();
-                String code = et_code.getText().toString().trim();
-                String new_secret = et_new_secret.toString().trim();
+                phone = et_phone.getText().toString().trim();
+                code = et_code.getText().toString().trim();
+                new_secret = et_new_secret.toString().trim();
+//                Toast.makeText(ForgetSecretActivity.this, "new _secret: " + new_secret, Toast.LENGTH_SHORT).show();
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(ForgetSecretActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
                 }else if (phone.length() != 11){
@@ -165,14 +172,16 @@ public class ForgetSecretActivity extends AppCompatActivity {
                     SMSSDK.submitVerificationCode("86", phone, code);
                     SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sp.edit();
-                    editor.putString(phone, new_secret);
-                    editor.commit();
+                    editor.putString(phone, "123");
+                    editor.apply();
+                    SharedPreferences sharedPreferences = getSharedPreferences("loginInfo", MODE_PRIVATE);
+                    Log.d("ForgetSecretActivity", "onClick: "+sharedPreferences.getString(phone, ""));
 
-                    if (sp.getString(phone, "") == new_secret) {
-                        Toast.makeText(ForgetSecretActivity.this, "重置密码成功", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(ForgetSecretActivity.this, "重置密码失败", Toast.LENGTH_SHORT).show();
-                    }
+//                    if (sp.getString(phone, "") == new_secret) {
+                    Toast.makeText(ForgetSecretActivity.this, "重置密码成功" +"\n" + "newsecret: " + sp.getString(phone, ""), Toast.LENGTH_SHORT).show();
+//                    }else {
+//                        Toast.makeText(ForgetSecretActivity.this, "重置密码失败", Toast.LENGTH_SHORT).show();
+//                    }
                 }
             }
         });

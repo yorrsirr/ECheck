@@ -172,7 +172,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if (phone.length() != 11){
                     Toast.makeText(RegisterActivity.this, "手机号位数错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (phone.matches("[1][3578].+")){
+                }else if (!phone.matches("[1][3578].+")){
                     Toast.makeText(RegisterActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(secret)){
@@ -188,9 +188,9 @@ public class RegisterActivity extends AppCompatActivity {
                     saveRegisterInfo(phone, secret);
 
                     //返回账号到HomeActivity中
-                    Intent data = new Intent();
-                    data.putExtra("phone", phone);
-                    setResult(RESULT_OK, data);
+//                    Intent data = new Intent();
+//                    data.putExtra("phone", phone);
+//                    setResult(RESULT_OK, data);
                     RegisterActivity.this.finish();
                 }
             }
