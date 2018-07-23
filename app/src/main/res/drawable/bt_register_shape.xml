@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--填充背景色 -->
+    <solid android:color="@color/colorPrimary" />
+
+    <!--描边 他需要 2个参数，颜色 第二参数 宽度 -->
+    <stroke
+        android:width="1dp"
+        android:color="@color/colorPrimary" />
+
+
+    <!-- 设置弧度Radius设置所有角的弧度 -->
+    <corners
+        android:radius="40dp" />
+
+
+    <padding
+        android:top="2dp"
+        android:bottom="2dp" />
+</shape>
