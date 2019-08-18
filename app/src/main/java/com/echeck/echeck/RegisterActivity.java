@@ -42,25 +42,25 @@ public class RegisterActivity extends AppCompatActivity {
     private String phone, secret;
 
 
-    final OkHttpClient client = new OkHttpClient();
+//    final OkHttpClient client = new OkHttpClient();
 
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg){
-            if(msg.what==1){
-                String ReturnMessage = (String) msg.obj;
-                Log.i("获取的返回信息", ReturnMessage);
-                final Person person = new Gson().fromJson(ReturnMessage, Person.class);
-                final String AA = person.getStatus();
-                /***
-                 * 在此处可以通过获取到的Msg值来判断
-                 * 给出用户提示注册成功 与否，以及判断是否用户名已经存在
-                 */
-                Log.i("MSGhahahha", AA);
-            }
-
-        }
-    };
+//    private Handler mHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg){
+//            if(msg.what==1){
+//                String ReturnMessage = (String) msg.obj;
+//                Log.i("获取的返回信息", ReturnMessage);
+//                final Person person = new Gson().fromJson(ReturnMessage, Person.class);
+//                final String AA = person.getStatus();
+//                /***
+//                 * 在此处可以通过获取到的Msg值来判断
+//                 * 给出用户提示注册成功 与否，以及判断是否用户名已经存在
+//                 */
+//                Log.i("MSGhahahha", AA);
+//            }
+//
+//        }
+//    };
 
 
     @Override
@@ -84,28 +84,26 @@ public class RegisterActivity extends AppCompatActivity {
     /*
     向服务器发送请求
      */
-    private void  postRequest(String phone, String secret){
-        RequestBody formBody = new FormBody.Builder()
-                .add("phone", phone)
-                .add("secret", secret)
-                .build();
-        //发起请求
-        final Request request = new Request.Builder()
-                .url("http://119.29.167.150:8088/webtest2/1")
-                .post(formBody)
-                .build();
-        //新建一个线程，用于得到服务器响应的参数
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Response response = null;
-                try {
-                    //回调
-                    response = client.newCall(request).execute();
+//    private void  postRequest(String phone, String secret){
+//        RequestBody formBody = new FormBody.Builder()
+//                .add("phone", phone)
+//                .add("secret", secret)
+//                .build();
+//        //发起请求
+//        final Request request = new Request.Builder()
+//                .url("http://119.29.167.150:8088/webtest2/1")
+//                .post(formBody)
+//                .build();
+//        //新建一个线程，用于得到服务器响应的参数
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Response response = null;
+//                try {
+//                    //回调
+//                    response = client.newCall(request).execute();
 //                    Toast.makeText(RegisterActivity.this, response.body().string(), Toast.LENGTH_LONG);
-                    Log.d(TAG, "onResponse: "+response.body().string());
-
-
+//                    Log.d(TAG, "onResponse: "+response.body().string());
 //                    if (response.isSuccessful()) {
 //                        //将服务器响应的参数response.body().string())发送到hanlder中，并更新ui
 //                        mHandler.obtainMessage(1, response.body().string()).sendToTarget();
@@ -113,14 +111,13 @@ public class RegisterActivity extends AppCompatActivity {
 //                    } else {
 //                        throw new IOException("Unexpected code:" + response);
 //                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-
-    }
+//
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+//    }
 
 
     /*
@@ -172,7 +169,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }else if (phone.length() != 11){
                     Toast.makeText(RegisterActivity.this, "手机号位数错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!phone.matches("[1][3578].+")){
+                }else if (!phone.matches("[1][34578].+")){
                     Toast.makeText(RegisterActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(secret)){
@@ -188,9 +185,9 @@ public class RegisterActivity extends AppCompatActivity {
                     saveRegisterInfo(phone, secret);
 
                     //返回账号到HomeActivity中
-//                    Intent data = new Intent();
-//                    data.putExtra("phone", phone);
-//                    setResult(RESULT_OK, data);
+                    Intent data = new Intent();
+                    data.putExtra("phone", phone);
+                    setResult(RESULT_OK, data);
                     RegisterActivity.this.finish();
                 }
             }
@@ -204,11 +201,9 @@ public class RegisterActivity extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         //获取密码
         String spSecret = sp.getString(phone, "");
-
         if (!TextUtils.isEmpty(spSecret)){
             has_phone = true;
         }
-
         return has_phone;
     }
 

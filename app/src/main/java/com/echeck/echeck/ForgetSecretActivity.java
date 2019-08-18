@@ -33,11 +33,6 @@ public class ForgetSecretActivity extends AppCompatActivity {
     public int T = 60; //倒计时时长
     private Handler mHandler = new Handler();
 
-    int  b =2;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,28 +69,32 @@ public class ForgetSecretActivity extends AppCompatActivity {
                     //回调完成
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
-//                        flag = true;
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-//                                Toast.makeText(ForgetSecretActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                                SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sp.edit();
+                                editor.putString(phone, new_secret);
+                                editor.commit();
+                                SharedPreferences sharedPreferences = getSharedPreferences("loginInfo", MODE_PRIVATE);
+                                if (sp.getString(phone, "") == new_secret) {
+                                    Toast.makeText(ForgetSecretActivity.this, "重置密码成功", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(ForgetSecretActivity.this, HomeActivity.class));
+                                }
                             }
                         });
-                    }else if (event != SMSSDK.EVENT_GET_VERIFICATION_CODE){
-                        Toast.makeText(ForgetSecretActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                         //获取验证码成功
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(ForgetSecretActivity.this, "获取验证码成功", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
                         //返回支持发送验证码的国家列表
                     }
                 }else{
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ForgetSecretActivity.this, "验证码错误", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     ((Throwable)data).printStackTrace();
                 }
             }
@@ -111,7 +110,6 @@ public class ForgetSecretActivity extends AppCompatActivity {
         et_phone = (EditText) findViewById(R.id.et_phone);
         et_code = (EditText) findViewById(R.id.et_code);
         et_new_secret = (EditText) findViewById(R.id.et_new_secret);
-
     }
 
 
@@ -143,8 +141,6 @@ public class ForgetSecretActivity extends AppCompatActivity {
                 } else {
                     SMSSDK.getVerificationCode("86", phone);
                     Toast.makeText(ForgetSecretActivity.this, "已发送验证码至: " + phone, Toast.LENGTH_SHORT).show();
-//                    bt_get_code.setBackground(getResources().getDrawable(R.drawable.bt_register_shape));
-//                    bt_get_code.setTextColor(getResources().getColor(R.color.white));
                     new Thread(new ForgetSecretActivity.MyCountDownTimer()).start();
                 }
             }
@@ -155,35 +151,25 @@ public class ForgetSecretActivity extends AppCompatActivity {
             public void onClick(View v) {
                 phone = et_phone.getText().toString().trim();
                 code = et_code.getText().toString().trim();
-                new_secret = et_new_secret.toString().trim();
+                new_secret = et_new_secret.getText().toString().trim();
 //                Toast.makeText(ForgetSecretActivity.this, "new _secret: " + new_secret, Toast.LENGTH_SHORT).show();
                 if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(ForgetSecretActivity.this, "手机号不能为空", Toast.LENGTH_SHORT).show();
                 }else if (phone.length() != 11){
                     Toast.makeText(ForgetSecretActivity.this, "手机号位数错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!phone.matches("[1][3578].+")) {
+                }else if (!phone.matches("[1][34578].+")) {
                     Toast.makeText(ForgetSecretActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (TextUtils.isEmpty(code)){
                     Toast.makeText(ForgetSecretActivity.this, "请输入您的验证码", Toast.LENGTH_SHORT).show();
                 }else if (code.length() != 4){
                     Toast.makeText(ForgetSecretActivity.this, "您的验证码位数不对", Toast.LENGTH_SHORT).show();
+                }else if (TextUtils.isEmpty(new_secret)){
+                    Toast.makeText(ForgetSecretActivity.this, "请输入新密码", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     SMSSDK.submitVerificationCode("86", phone, code);
-                    SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString(phone, "123");
-                    editor.apply();
-                    SharedPreferences sharedPreferences = getSharedPreferences("loginInfo", MODE_PRIVATE);
-                    Log.d("ForgetSecretActivity", "onClick: "+sharedPreferences.getString(phone, ""));
-
-//                    if (sp.getString(phone, "") == new_secret) {
-                    Toast.makeText(ForgetSecretActivity.this, "重置密码成功" +"\n" + "newsecret: " + sp.getString(phone, ""), Toast.LENGTH_SHORT).show();
-//                    }else {
-//                        Toast.makeText(ForgetSecretActivity.this, "重置密码失败", Toast.LENGTH_SHORT).show();
-//                    }
                 }
             }
         });

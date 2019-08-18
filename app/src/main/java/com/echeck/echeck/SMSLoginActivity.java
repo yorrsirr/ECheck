@@ -40,10 +40,9 @@ public class SMSLoginActivity extends AppCompatActivity {
     private EditText et_code;
     private Button bt_get_code;
     private Button bt_sumit;
-        EventHandler eventHandler;
-    //    private static boolean flag=false;
-        public int T = 10; //倒计时时长
-        private Handler mHandler = new Handler();
+    EventHandler eventHandler;
+    public int T = 60; //倒计时时长
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,14 +141,12 @@ public class SMSLoginActivity extends AppCompatActivity {
                 }else if (phone.length() != 11){
                     Toast.makeText(SMSLoginActivity.this, "手机号位数错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!phone.matches("[1][3578].+")){
+                }else if (!phone.matches("[1][34578].+")){
                     Toast.makeText(SMSLoginActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
                     SMSSDK.getVerificationCode("86", phone);
-                    Toast.makeText(SMSLoginActivity.this, "已发送验证码至: " + phone, Toast.LENGTH_SHORT).show();
-//                    bt_get_code.setBackground(getResources().getDrawable(R.drawable.bt_register_shape));
-//                    bt_get_code.setTextColor(getResources().getColor(R.color.white));
+                    Toast.makeText(SMSLoginActivity.this, "已发送验证码至: " + phone, Toast.LENGTH_SHORT).show();;
                     new Thread(new MyCountDownTimer()).start();
                 }
             }

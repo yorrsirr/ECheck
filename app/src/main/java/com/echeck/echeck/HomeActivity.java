@@ -77,33 +77,33 @@ public class HomeActivity extends AppCompatActivity {
                 phone = et_phone.getText().toString();
                 secret = et_secret.getText().toString();
 
-                if (TextUtils.isEmpty(phone)){
+                if (TextUtils.isEmpty(phone)) {
                     Toast.makeText(HomeActivity.this, "请输入登录手机号", Toast.LENGTH_LONG).show();
                     return;
-                }else if (phone.length() != 11){
+                } else if (phone.length() != 11) {
                     Toast.makeText(HomeActivity.this, "手机号位数错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!phone.matches("[1][3578].+")){
+                } else if (!phone.matches("[1][3578].+")) {
                     Toast.makeText(HomeActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (TextUtils.isEmpty(secret)){
+                } else if (TextUtils.isEmpty(secret)) {
                     Toast.makeText(HomeActivity.this, "请输入密码", Toast.LENGTH_SHORT).show();
                     return;
-                }else if (secret.equals(spSecret)){
+                } else if (secret.equals(spSecret)) {
                     Toast.makeText(HomeActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-//                    saveLoginStatus(true, phone);
-//                    Intent data = new Intent();
-//                    //datad.putExtra( ); name , value ;
-//                    data.putExtra("isLogin",true);
+                    saveLoginStatus(true, phone);
+                    Intent data = new Intent();
+                    //datad.putExtra( ); name , value ;
+                    data.putExtra("isLogin", true);
                     //RESULT_OK为Activity系统常量，状态码为-1
                     // 表示此页面下的内容操作成功将data返回到上一页面，如果是用back返回过去的则不存在用setResult传递data值
-//                    setResult(RESULT_OK,data);
+                    setResult(RESULT_OK, data);
                     startActivity(new Intent(HomeActivity.this, WriteInfoActivity.class));
                     return;
-                }else if(spSecret!=null && !spSecret.equals(secret)){
+                } else if (spSecret != null && !spSecret.equals(secret)) {
                     Toast.makeText(HomeActivity.this, "密码错误", Toast.LENGTH_SHORT).show();
                     return;
-                }else {
+                } else {
                     Toast.makeText(HomeActivity.this, "手机号未被注册", Toast.LENGTH_SHORT).show();
                 }
 
@@ -138,28 +138,29 @@ public class HomeActivity extends AppCompatActivity {
 
     //根据手机号返回对应的密码
     private String readSecret(String phone) {
-        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
         return sp.getString(phone, "");
     }
 
     //保存登录状态
-//    private void saveLoginStatus(boolean status, String phone) {
-//        SharedPreferences sp=getSharedPreferences("loginInfo", MODE_PRIVATE);
-//        //获取编辑器
-//        SharedPreferences.Editor editor = sp.edit();
-//        //存入boolean类型的登录状态
-//        editor.putBoolean("isLogin", status);
-//        //存入登录时的手机号
-//        editor.putString("loginPhone", phone);
-//        //提交修改
-//        editor.commit();
-//    }
+    private void saveLoginStatus(boolean status, String phone) {
+        SharedPreferences sp = getSharedPreferences("loginInfo", MODE_PRIVATE);
+        //获取编辑器
+        SharedPreferences.Editor editor = sp.edit();
+        //存入boolean类型的登录状态
+        editor.putBoolean("isLogin", status);
+        //存入登录时的手机号
+        editor.putString("loginPhone", phone);
+        //提交修改
+        editor.commit();
+    }
 
     /**
      * 注册成功的数据返回至此
+     *
      * @param requestCode 请求码
-     * @param resultCode 结果码
-     * @param data 数据
+     * @param resultCode  结果码
+     * @param data        数据
      */
     @Override
     //显示数据， onActivityResult
@@ -169,11 +170,11 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if(data!=null){
+        if (data != null) {
             //是获取注册界面回传过来的用户名
             // getExtra().getString("***");
-            String userName=data.getStringExtra("userName");
-            if(!TextUtils.isEmpty(userName)){
+            String userName = data.getStringExtra("userName");
+            if (!TextUtils.isEmpty(userName)) {
                 //设置用户名到 et_phone 控件
                 et_phone.setText(userName);
                 //et_user_name控件的setSelection()方法来设置光标位置
